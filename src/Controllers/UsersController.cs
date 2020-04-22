@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UsersAPI.Data;
 using UsersAPI.DtoModels;
+using UsersAPI.Services.conracts;
 
 namespace UsersAPI.Controllers
 {
@@ -12,23 +13,18 @@ namespace UsersAPI.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationDbContext context;
+        private readonly IUsersService usersService;
 
-        public UsersController(ApplicationDbContext context)
+        public UsersController(IUsersService usersService)
         {
-            this.context = context;
+            this.usersService = usersService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<UserDТО>> GetUsers()
         {
-            var users = context.Users.Select(x => new UserDТО
-            {
-                FirstName = x.FirstName ?? "",
-                LastName = x.LastName ?? "",
-                Picture = x.Picture,
-                Id = x.Id
-            }).ToArray();
+            var users = usersService.GetAllUsers()
+                .ToList();
 
             return users;
         }
@@ -36,15 +32,22 @@ namespace UsersAPI.Controllers
         [HttpGet]
         public ActionResult<UserDТО> GetUser(string id)
         {
-            var user = context.Users.Select(x => new UserDТО
-            {
-                FirstName = x.FirstName ?? "",
-                LastName = x.LastName ?? "",
-                Picture = x.Picture,
-                Id = x.Id
-            }).FirstOrDefault(x => x.Id == id);
+            var user = usersService.GetUser(id);
 
             return user;
+        }
+
+        [HttpPut]
+        public ActionResult EditUser(string id, UserDТО user)
+        {
+            usersService.EditUser(id, user);
+
+            return Ok(new
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                updateAt = DateTime.UtcNow
+            });
         }
     }
 }

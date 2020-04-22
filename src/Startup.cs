@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using UsersAPI.Data;
 using UsersAPI.Models;
+using UsersAPI.Services;
+using UsersAPI.Services.conracts;
 
 namespace UsersAPI
 {
@@ -74,6 +76,8 @@ namespace UsersAPI
             });
 
             services.AddControllers();
+
+            services.AddScoped<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
