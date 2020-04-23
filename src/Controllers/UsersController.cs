@@ -40,6 +40,11 @@ namespace UsersAPI.Controllers
         [HttpPut]
         public ActionResult EditUser(string id, UserDТО user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             usersService.EditUser(id, user);
 
             return Ok(new
