@@ -1,4 +1,3 @@
-
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using UsersAPI.Data;
-using UsersAPI.Data.Common;
+using UsersAPI.Data.Contracts;
 using UsersAPI.Models;
 using UsersAPI.Services;
 using UsersAPI.Services.conracts;

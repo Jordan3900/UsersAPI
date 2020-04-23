@@ -16,8 +16,10 @@ namespace UsersAPI.Services
     {
         private readonly IRepository<User> userRepository;
         private readonly UserManager<User> userManager;
+
         public UsersService(IRepository<User> userRepository, UserManager<User> userManager)
         {
+            this.userManager = userManager;
             this.userRepository = userRepository;
         }
 
@@ -27,7 +29,9 @@ namespace UsersAPI.Services
             {
                 FirstName = userDТО.FirstName,
                 LastName = userDТО.LastName,
-                Picture = userDТО.Picture
+                Picture = userDТО.Picture,
+                Email = userDТО.Email,
+                UserName = userDТО.Email
             };
 
             var result = await userManager.CreateAsync(user, Constants.DEFAULT_PASSWORD);

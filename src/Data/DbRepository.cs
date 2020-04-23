@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UsersAPI.Data.Common;
+using UsersAPI.Data.Contracts;
 
 namespace UsersAPI.Data
 {
