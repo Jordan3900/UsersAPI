@@ -21,10 +21,13 @@ namespace UsersAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDТО>> GetUsers()
+        public ActionResult<IEnumerable<UserDТО>> GetUsers(int page = 1, int perPage = 6)
         {
             var users = usersService.GetAllUsers()
+                .Skip((page - 1) * perPage)
+                .Take(perPage)
                 .ToList();
+
 
             return users;
         }
