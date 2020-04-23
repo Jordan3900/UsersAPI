@@ -1,26 +1,45 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UsersAPI.Common;
 using UsersAPI.Data;
+using UsersAPI.Data.Contracts;
 using UsersAPI.DtoModels;
+using UsersAPI.Models;
 using UsersAPI.Services.conracts;
 
 namespace UsersAPI.Services
 {
     public class UsersService : IUsersService
     {
-        private ApplicationDbContext context;
-
-        public UsersService(ApplicationDbContext context)
+        private readonly IRepository<User> userRepository;
+        private readonly UserManager<User> userManager;
+        public UsersService(IRepository<User> userRepository, UserManager<User> userManager)
         {
-            this.context = context;
+            this.userRepository = userRepository;
         }
 
-
-        public void EditUser(string id, UserDТО userDТО)
+        async public Task<bool> AddUser(UserDТО userDТО)
         {
-            var user = context.Users.FirstOrDefault(x => x.Id == id);
+            var user = new User
+            {
+                FirstName = userDТО.FirstName,
+                LastName = userDТО.LastName,
+                Picture = userDТО.Picture
+            };
+
+            var result = await userManager.CreateAsync(user, Constants.DEFAULT_PASSWORD);
+
+            return result.Succeeded;
+        }
+
+        public Task EditUser(string id, UserDТО userDТО)
+        {
+            var user = userRepository
+                .All()
+                .FirstOrDefault(x => x.Id == id);
 
             if (user == null)
             {
@@ -30,12 +49,24 @@ namespace UsersAPI.Services
             user.FirstName = userDТО.FirstName;
             user.LastName = userDТО.LastName;
 
-            context.SaveChanges();
+            return userRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<UserDТО> GetAllUsers()
+        public void DeleteUser(User user)
         {
-            var users = context.Users.Select(x => new UserDТО
+            this.userRepository.Delete(user);
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            var users = this.userRepository.All();
+
+            return users;
+        }
+
+        public IEnumerable<UserDТО> GetAllUsersDTO()
+        {
+            var users = userRepository.All().Select(x => new UserDТО
             {
                 FirstName = x.FirstName ?? "",
                 LastName = x.LastName ?? "",
@@ -46,9 +77,17 @@ namespace UsersAPI.Services
             return users;
         }
 
-        public UserDТО GetUser(string id)
+        public User GetUser(string id)
         {
-            var user = context.Users.Select(x => new UserDТО
+            var user = userRepository.All()
+                .FirstOrDefault(x => x.Id == id);
+
+            return user;
+        }
+
+        public UserDТО GetUserDTO(string id)
+        {
+            var user = userRepository.All().Select(x => new UserDТО
             {
                 FirstName = x.FirstName ?? "",
                 LastName = x.LastName ?? "",

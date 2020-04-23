@@ -13,6 +13,8 @@ namespace UsersAPI.DtoModels
 
         public string LastName { get; set; }
 
+        public string Password { get; set; }
+
         public string Picture { get; set; }
     }
 }

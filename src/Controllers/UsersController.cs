@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsersAPI.DtoModels;
@@ -23,11 +24,9 @@ namespace UsersAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<UserDТО>> GetUsers(int page = 1, int perPage = 6)
         {
-            var users = usersService.GetAllUsers()
-                .Skip((page - 1) * perPage)
-                .Take(perPage)
-                .ToList();
-
+            var users = usersService.GetAllUsersDTO().Skip((page - 1) * perPage)
+              .Take(perPage)
+              .ToList();
 
             return users;
         }
@@ -35,20 +34,43 @@ namespace UsersAPI.Controllers
         [HttpGet]
         public ActionResult<UserDТО> GetUser(string id)
         {
-            var user = usersService.GetUser(id);
+            var user = this.usersService.GetUserDTO(id);
 
             return user;
         }
 
-        [HttpPut]
-        public ActionResult EditUser(string id, UserDТО user)
+        [HttpPost]
+        async public Task<ActionResult> AddUser(UserDТО user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            usersService.EditUser(id, user);
+            var succeed = await this.usersService.AddUser(user);
+
+            if (!succeed)
+            {
+                return BadRequest();
+            }
+
+            return Ok(new
+            {
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                createAt = DateTime.UtcNow
+            });
+        }
+
+        [HttpPut]
+        async public Task<ActionResult> EditUser(string id, UserDТО user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            await this.usersService.EditUser(id, user);
 
             return Ok(new
             {
@@ -56,6 +78,14 @@ namespace UsersAPI.Controllers
                 lastName = user.LastName,
                 updateAt = DateTime.UtcNow
             });
+        }
+
+        [HttpDelete]
+        public void DeleteUser(string id)
+        {
+            var user = this.usersService.GetUser(id);
+
+            this.usersService.DeleteUser(user);
         }
     }
 }

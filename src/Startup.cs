@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using UsersAPI.Data;
+using UsersAPI.Data.Common;
 using UsersAPI.Models;
 using UsersAPI.Services;
 using UsersAPI.Services.conracts;
@@ -77,6 +78,7 @@ namespace UsersAPI
 
             services.AddControllers();
 
+            services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
             services.AddScoped<IUsersService, UsersService>();
         }
 
