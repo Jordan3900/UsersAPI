@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UsersAPI.Common;
-using UsersAPI.Data;
 using UsersAPI.Data.Contracts;
 using UsersAPI.DtoModels;
 using UsersAPI.Models;
