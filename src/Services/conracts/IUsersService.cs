@@ -19,6 +19,6 @@ namespace UsersAPI.Services.Conracts
 
         Task<bool> AddUser(UserDТО userDТО);
 
-        void DeleteUser(User user);
+        Task DeleteUser(User user);
     }
 }

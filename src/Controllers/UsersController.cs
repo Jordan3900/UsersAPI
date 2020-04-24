@@ -81,11 +81,16 @@ namespace UsersAPI.Controllers
         }
 
         [HttpDelete]
-        public void DeleteUser(string id)
+        async public Task<ActionResult> DeleteUser(string id)
         {
             var user = this.usersService.GetUser(id);
 
-            this.usersService.DeleteUser(user);
+            await this.usersService.DeleteUser(user);
+
+            return Ok(new
+            {
+                deletedAt = DateTime.UtcNow
+            });
         }
     }
 }

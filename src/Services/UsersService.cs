@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,14 @@ namespace UsersAPI.Services
     {
         private readonly IRepository<User> userRepository;
         private readonly UserManager<User> userManager;
-
-        public UsersService(IRepository<User> userRepository, UserManager<User> userManager)
+        private readonly IMapper mapper;
+        public UsersService(IRepository<User> userRepository,
+            UserManager<User> userManager,
+            IMapper mapper)
         {
             this.userManager = userManager;
             this.userRepository = userRepository;
+            this.mapper = mapper;
         }
 
         async public Task<bool> AddUser(UserDТО userDТО)
@@ -52,12 +56,14 @@ namespace UsersAPI.Services
             user.FirstName = userDТО.FirstName;
             user.LastName = userDТО.LastName;
 
-            return userRepository.SaveChangesAsync();
+            return this.userRepository.SaveChangesAsync();
         }
 
-        public void DeleteUser(User user)
+        public Task DeleteUser(User user)
         {
             this.userRepository.Delete(user);
+
+            return this.userRepository.SaveChangesAsync();
         }
 
         public IEnumerable<User> GetAllUsers()
@@ -69,15 +75,10 @@ namespace UsersAPI.Services
 
         public IEnumerable<UserDТО> GetAllUsersDTO()
         {
-            var users = userRepository.All().Select(x => new UserDТО
-            {
-                FirstName = x.FirstName ?? "",
-                LastName = x.LastName ?? "",
-                Picture = x.Picture,
-                Id = x.Id
-            });
+            var users = userRepository.All();
+            var usersDTO = mapper.Map<IQueryable<User>, List<UserDТО>>(users);
 
-            return users;
+            return usersDTO;
         }
 
         public User GetUser(string id)
@@ -90,15 +91,9 @@ namespace UsersAPI.Services
 
         public UserDТО GetUserDTO(string id)
         {
-            var user = userRepository.All().Select(x => new UserDТО
-            {
-                FirstName = x.FirstName ?? "",
-                LastName = x.LastName ?? "",
-                Picture = x.Picture,
-                Id = x.Id
-            }).FirstOrDefault(x => x.Id == id);
-
-            return user;
+            var user = userRepository.All().FirstOrDefault(x => x.Id == id);
+            var userDto = mapper.Map<User, UserDТО>(user);
+            return userDto;
         }
     }
 }

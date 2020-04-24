@@ -13,6 +13,7 @@ using UsersAPI.Data.Contracts;
 using UsersAPI.Models;
 using UsersAPI.Services;
 using UsersAPI.Services.Conracts;
+using AutoMapper;
 
 namespace UsersAPI
 {
@@ -30,7 +31,7 @@ namespace UsersAPI
         {
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.AllowAnyOrigin()
+                builder.AllowAnyOrigin()    
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
@@ -75,8 +76,9 @@ namespace UsersAPI
                 options.Password.RequiredUniqueChars = 0;
             });
 
-            services.AddControllers();
+            services.AddAutoMapper(typeof(Startup));
 
+            services.AddControllers();
             services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
             services.AddScoped<IUsersService, UsersService>();
         }
