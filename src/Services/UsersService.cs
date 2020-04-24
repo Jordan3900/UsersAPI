@@ -7,7 +7,7 @@ using UsersAPI.Common;
 using UsersAPI.Data.Contracts;
 using UsersAPI.DtoModels;
 using UsersAPI.Models;
-using UsersAPI.Services.conracts;
+using UsersAPI.Services.Conracts;
 
 namespace UsersAPI.Services
 {

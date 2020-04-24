@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UsersAPI.DtoModels;
 using UsersAPI.Models;
 
-namespace UsersAPI.Services.conracts
+namespace UsersAPI.Services.Conracts
 {
     public interface IUsersService
     {

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace UsersAPI.Data.Contracts
@@ -8,7 +9,7 @@ namespace UsersAPI.Data.Contracts
     {
         IQueryable<TEntity> All();
 
-        Task AddAsync(TEntity entity);
+        ValueTask<EntityEntry<TEntity>> AddAsync(TEntity entity);
 
         void Delete(TEntity entity);
 

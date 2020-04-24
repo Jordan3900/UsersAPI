@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsersAPI.DtoModels;
-using UsersAPI.Services.conracts;
+using UsersAPI.Services.Conracts;
 
 namespace UsersAPI.Controllers
 {

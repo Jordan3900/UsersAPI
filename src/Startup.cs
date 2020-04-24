@@ -12,7 +12,7 @@ using UsersAPI.Data;
 using UsersAPI.Data.Contracts;
 using UsersAPI.Models;
 using UsersAPI.Services;
-using UsersAPI.Services.conracts;
+using UsersAPI.Services.Conracts;
 
 namespace UsersAPI
 {

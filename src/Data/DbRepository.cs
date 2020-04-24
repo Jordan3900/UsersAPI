@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,16 +17,24 @@ namespace UsersAPI.Data
         {
             this.context = context;
             this.dbSet = this.context.Set<TEntity>();
+            this.Length = this.dbSet.Count();
         }
 
-        public Task AddAsync(TEntity entity)
+        public int Length { get; set; }
+
+        public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity entity)
         {
-            return Task.Run(() =>  this.dbSet.AddAsync(entity));
+            return this.AddAsync(entity);
         }
 
         public IQueryable<TEntity> All()
         {
             return this.dbSet;
+        }
+
+        public IQueryable<TEntity> FindPaged(int page, int pageSize)
+        {
+            return this.dbSet.Skip(page * pageSize).Take(pageSize);
         }
 
         public void Delete(TEntity entity)
