@@ -22,14 +22,14 @@ namespace UsersAPI.Data
 
         public int Length { get; set; }
 
-        public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity entity)
+        async public ValueTask<EntityEntry<TEntity>> AddAsync(TEntity entity)
         {
-            return this.AddAsync(entity);
+            return await this.AddAsync(entity);
         }
 
         public IQueryable<TEntity> All()
         {
-            return this.dbSet;
+            return this.dbSet.AsNoTracking();
         }
 
         public IQueryable<TEntity> FindPaged(int page, int pageSize)

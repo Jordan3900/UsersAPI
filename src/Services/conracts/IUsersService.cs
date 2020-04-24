@@ -7,13 +7,13 @@ namespace UsersAPI.Services.Conracts
 {
     public interface IUsersService
     {
-        IEnumerable<User> GetAllUsers();
+        Task<IEnumerable<User>> GetAllUsers();
 
-        IEnumerable<UserDТО> GetAllUsersDTO();
+        Task<IEnumerable<UserDТО>> GetAllUsersDTO(int page, int perPage);
 
-        User GetUser(string id);
+        Task<User> GetUser(string id);
 
-        UserDТО GetUserDTO(string id);
+        Task<UserDТО> GetUserDTO(string id);
 
         Task EditUser(string id, UserDТО userDТО);
 

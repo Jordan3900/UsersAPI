@@ -12,7 +12,6 @@ using UsersAPI.Models;
 
 namespace UsersAPI.Controllers
 {
-
     [Route("[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase

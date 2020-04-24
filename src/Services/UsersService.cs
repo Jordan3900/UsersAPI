@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace UsersAPI.Services
         private readonly IRepository<User> userRepository;
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
+
         public UsersService(IRepository<User> userRepository,
             UserManager<User> userManager,
             IMapper mapper)
@@ -42,7 +44,7 @@ namespace UsersAPI.Services
             return result.Succeeded;
         }
 
-        public Task EditUser(string id, UserDТО userDТО)
+        async public Task EditUser(string id, UserDТО userDТО)
         {
             var user = userRepository
                 .All()
@@ -56,43 +58,47 @@ namespace UsersAPI.Services
             user.FirstName = userDТО.FirstName;
             user.LastName = userDТО.LastName;
 
-            return this.userRepository.SaveChangesAsync();
+            await this.userRepository.SaveChangesAsync();
         }
 
-        public Task DeleteUser(User user)
+        async public Task DeleteUser(User user)
         {
             this.userRepository.Delete(user);
 
-            return this.userRepository.SaveChangesAsync();
+            await this.userRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<User> GetAllUsers()
+        async public Task<IEnumerable<User>> GetAllUsers()
         {
-            var users = this.userRepository.All();
+            var users = await this.userRepository.All()
+                .ToListAsync();
 
             return users;
         }
 
-        public IEnumerable<UserDТО> GetAllUsersDTO()
+        async public Task<IEnumerable<UserDТО>> GetAllUsersDTO(int page, int perPage)
         {
-            var users = userRepository.All();
-            var usersDTO = mapper.Map<IQueryable<User>, List<UserDТО>>(users);
+            var users = await userRepository.All().Skip((page - 1) * perPage)
+              .Take(perPage).ToListAsync();
+
+            var usersDTO = mapper.Map<IEnumerable<User>, List<UserDТО>>(users);
 
             return usersDTO;
         }
 
-        public User GetUser(string id)
+        async public Task<User> GetUser(string id)
         {
-            var user = userRepository.All()
-                .FirstOrDefault(x => x.Id == id);
+            var user = await userRepository.All()
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return user;
         }
 
-        public UserDТО GetUserDTO(string id)
+        async public Task<UserDТО> GetUserDTO(string id)
         {
-            var user = userRepository.All().FirstOrDefault(x => x.Id == id);
+            var user = await userRepository.All().FirstOrDefaultAsync(x => x.Id == id);
             var userDto = mapper.Map<User, UserDТО>(user);
+
             return userDto;
         }
     }

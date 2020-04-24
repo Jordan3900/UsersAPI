@@ -22,19 +22,17 @@ namespace UsersAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserDТО>> GetUsers(int page = 1, int perPage = 6)
+        async public Task<IEnumerable<UserDТО>> GetUsers(int page = 1, int perPage = 6)
         {
-            var users = usersService.GetAllUsersDTO().Skip((page - 1) * perPage)
-              .Take(perPage)
-              .ToList();
+            var users = await usersService.GetAllUsersDTO(page, perPage);
 
             return users;
         }
 
         [HttpGet]
-        public ActionResult<UserDТО> GetUser(string id)
+        async public Task<ActionResult<UserDТО>> GetUser(string id)
         {
-            var user = this.usersService.GetUserDTO(id);
+            var user = await this.usersService.GetUserDTO(id);
 
             return user;
         }
@@ -83,7 +81,7 @@ namespace UsersAPI.Controllers
         [HttpDelete]
         async public Task<ActionResult> DeleteUser(string id)
         {
-            var user = this.usersService.GetUser(id);
+            var user = await this.usersService.GetUser(id);
 
             await this.usersService.DeleteUser(user);
 
