@@ -12,7 +12,7 @@ using UsersAPI.Data;
 using UsersAPI.Data.Contracts;
 using UsersAPI.Models;
 using UsersAPI.Services;
-using UsersAPI.Services.Conracts;
+using UsersAPI.Services.Contracts;
 using AutoMapper;
 
 namespace UsersAPI
