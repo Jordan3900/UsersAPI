@@ -22,7 +22,7 @@ namespace UsersAPI.Controllers
         }
 
         [HttpGet]
-        async public Task<ActionResult<IEnumerable<UserDТО>>> GetUsers(int page = 1, int perPage = 6)
+        public async Task<ActionResult<IEnumerable<UserDТО>>> GetUsers(int page = 1, int perPage = 6)
         {
             var users = await usersService.GetAllUsersDTO(page, perPage);
 
@@ -30,7 +30,7 @@ namespace UsersAPI.Controllers
         }
 
         [HttpGet]
-        async public Task<ActionResult<UserDТО>> GetUser(string id)
+        public async Task<ActionResult<UserDТО>> GetUser(string id)
         {
             if (String.IsNullOrWhiteSpace(id))
             {
@@ -44,7 +44,7 @@ namespace UsersAPI.Controllers
 
         [HttpPost]
         [ModelStateValidationFilter]
-        async public Task<ActionResult> AddUser(UserDТО userDTO)
+        public async Task<ActionResult> AddUser(UserDТО userDTO)
         {
             var user = await this.usersService.AddUser(userDTO);
 
@@ -53,7 +53,7 @@ namespace UsersAPI.Controllers
 
         [HttpPut]
         [ModelStateValidationFilter]
-        async public Task<ActionResult> EditUser(string id, UserDТО user)
+        public async Task<ActionResult> EditUser(string id, UserDТО user)
         {
             if (String.IsNullOrWhiteSpace(id))
             {
@@ -66,7 +66,7 @@ namespace UsersAPI.Controllers
         }
 
         [HttpDelete]
-        async public Task<ActionResult> DeleteUser(string id)
+        public async Task<ActionResult> DeleteUser(string id)
         {
             if (String.IsNullOrWhiteSpace(id))
             {
