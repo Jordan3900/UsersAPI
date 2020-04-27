@@ -22,65 +22,60 @@ namespace UsersAPI.Controllers
         }
 
         [HttpGet]
-        async public Task<IEnumerable<UserDТО>> GetUsers(int page = 1, int perPage = 6)
+        async public Task<ActionResult<IEnumerable<UserDТО>>> GetUsers(int page = 1, int perPage = 6)
         {
             var users = await usersService.GetAllUsersDTO(page, perPage);
 
-            return users;
+            return Ok(users);
         }
 
         [HttpGet]
         async public Task<ActionResult<UserDТО>> GetUser(string id)
         {
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest();
+            }
+
             var user = await this.usersService.GetUserDTO(id);
 
             return user;
         }
 
         [HttpPost]
-        async public Task<ActionResult> AddUser(UserDТО user)
+        async public Task<ActionResult> AddUser(UserDТО userDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var succeed = await this.usersService.AddUser(user);
+            var user = await this.usersService.AddUser(userDTO);
 
-            if (!succeed)
-            {
-                return BadRequest();
-            }
-
-            return Ok(new
-            {
-                firstName = user.FirstName,
-                lastName = user.LastName,
-                createAt = DateTime.UtcNow
-            });
+            return CreatedAtAction("AddUser", user);
         }
 
         [HttpPut]
         async public Task<ActionResult> EditUser(string id, UserDТО user)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || String.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
             }
 
-            await this.usersService.EditUser(id, user);
+            var editedUser = await this.usersService.EditUser(id, user);
 
-            return Ok(new
-            {
-                firstName = user.FirstName,
-                lastName = user.LastName,
-                updateAt = DateTime.UtcNow
-            });
+            return Ok(editedUser);
         }
 
         [HttpDelete]
         async public Task<ActionResult> DeleteUser(string id)
         {
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest();
+            }
+
             var user = await this.usersService.GetUser(id);
 
             await this.usersService.DeleteUser(user);

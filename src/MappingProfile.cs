@@ -8,7 +8,7 @@ namespace UsersAPI
     {
         public MappingProfile()
         {
-            CreateMap<User, UserDТО>();
+            CreateMap<User, UserDТО>().ReverseMap();
         }
     }
 }

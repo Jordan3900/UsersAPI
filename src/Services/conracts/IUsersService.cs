@@ -15,9 +15,9 @@ namespace UsersAPI.Services.Conracts
 
         Task<UserDТО> GetUserDTO(string id);
 
-        Task EditUser(string id, UserDТО userDТО);
+        Task<User> EditUser(string id, UserDТО userDТО);
 
-        Task<bool> AddUser(UserDТО userDТО);
+        Task<User> AddUser(UserDТО userDТО);
 
         Task DeleteUser(User user);
     }

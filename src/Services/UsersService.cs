@@ -28,27 +28,25 @@ namespace UsersAPI.Services
             this.mapper = mapper;
         }
 
-        async public Task<bool> AddUser(UserDТО userDТО)
+        async public Task<User> AddUser(UserDТО userDТО)
         {
-            var user = new User
-            {
-                FirstName = userDТО.FirstName,
-                LastName = userDТО.LastName,
-                Picture = userDТО.Picture,
-                Email = userDТО.Email,
-                UserName = userDТО.Email
-            };
+            var user = mapper.Map<UserDТО, User>(userDТО);
 
             var result = await userManager.CreateAsync(user, Constants.DEFAULT_PASSWORD);
 
-            return result.Succeeded;
+            if (!result.Succeeded)
+            {
+                throw new Exception("Invalid User data");
+            }
+
+            return user;
         }
 
-        async public Task EditUser(string id, UserDТО userDТО)
+        async public Task<User> EditUser(string id, UserDТО userDТО)
         {
-            var user = userRepository
+            var user = await userRepository
                 .All()
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (user == null)
             {
@@ -59,6 +57,8 @@ namespace UsersAPI.Services
             user.LastName = userDТО.LastName;
 
             await this.userRepository.SaveChangesAsync();
+
+            return user;
         }
 
         async public Task DeleteUser(User user)
