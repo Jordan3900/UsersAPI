@@ -14,6 +14,7 @@ using UsersAPI.Models;
 using UsersAPI.Services;
 using UsersAPI.Services.Contracts;
 using AutoMapper;
+using UsersAPI.Middlewares;
 
 namespace UsersAPI
 {
@@ -91,6 +92,8 @@ namespace UsersAPI
                 app.UseDeveloperExceptionPage();
             }
             app.UseCors("MyPolicy");
+
+            app.ConfigureExceptionHandler();
 
             app.UseHttpsRedirection();
 

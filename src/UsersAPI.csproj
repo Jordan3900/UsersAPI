@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget></PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Migrations\20200416121249_InitialCreate.cs" />
     <Compile Remove="Migrations\20200416121249_InitialCreate.Designer.cs" />

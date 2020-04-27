@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsersAPI.DtoModels;
+using UsersAPI.Filters;
 using UsersAPI.Services.Contracts;
 
 namespace UsersAPI.Controllers
@@ -42,22 +43,19 @@ namespace UsersAPI.Controllers
         }
 
         [HttpPost]
+        [ModelStateValidationFilter]
         async public Task<ActionResult> AddUser(UserDТО userDTO)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var user = await this.usersService.AddUser(userDTO);
 
             return CreatedAtAction("AddUser", user);
         }
 
         [HttpPut]
+        [ModelStateValidationFilter]
         async public Task<ActionResult> EditUser(string id, UserDТО user)
         {
-            if (!ModelState.IsValid || String.IsNullOrWhiteSpace(id))
+            if (String.IsNullOrWhiteSpace(id))
             {
                 return BadRequest();
             }
